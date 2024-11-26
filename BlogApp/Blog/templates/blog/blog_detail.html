@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="post-container max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg space-y-6">
+
+    <!-- Post Title -->
+    <h2 class="post-title text-5xl font-extrabold text-gray-900 mb-4">{{ post.title }}</h2>
+    
+    <!-- Post Meta (Author and Views) -->
+    <div class="post-meta flex items-center space-x-6 text-gray-600 mb-6">
+        <p class="text-lg"><strong>By:</strong> <span class="font-medium text-gray-800">{{ post.author }}</span></p>
+        <div class="views flex items-center space-x-1">
+            <!-- Replaced eye icon with text -->
+            <span class="text-lg font-semibold">👁️</span>
+            <span class="text-lg">{{ post.views }}</span>
+        </div>
+    </div>
+
+    <!-- Post Tag/Category -->
+    <div class="post-tag bg-blue-100 text-blue-800 text-sm py-1 px-3 rounded-full inline-block mb-6">
+        <strong>Category:</strong> {{ post.tag }}
+    </div>
+
+    <!-- Post Content -->
+    <div class="post-content text-lg text-gray-700 leading-relaxed mb-6">
+        <p>{{ post.content }}</p>
+    </div>
+
+    <!-- Comments Section -->
+    <h3 class="text-3xl font-semibold text-gray-900 mb-4">Comments</h3>
+    <div class="comments-container space-y-6">
+
+        {% for comment in comments %}
+        <div class="comment bg-gray-50 p-4 rounded-lg shadow-md space-y-2">
+            <p class="font-semibold text-lg">{{ comment.user.username }} <span class="text-gray-600 text-sm">on {{ comment.created_at }}</span></p>
+            <p class="text-gray-700">{{ comment.content }}</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Add Comment Form (Authenticated Users) -->
+    {% if user.is_authenticated %}
+    <div class="comment-form mt-8">
+        <h4 class="text-xl font-semibold text-gray-800 mb-4">Add a Comment</h4>
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn-submit bg-blue-600 text-white py-2 px-6 rounded-full hover:bg-blue-700 transition duration-300">Add Comment</button>
+        </form>
+    </div>
+    {% else %}
+    <p class="mt-4 text-gray-600">You must <a href="/accounts/login/" class="text-blue-600 hover:text-blue-800">log in</a> to add a comment.</p>
+    {% endif %}
+
+    <!-- Post Actions (Edit/Delete for Post Author) -->
+    {% if user.is_authenticated and post.author == user %}
+    <div class="post-actions mt-8 flex space-x-4">
+        <a href="{% url 'edit_blog_post' post_id=post.id %}" class="btn-edit bg-green-600 text-white py-2 px-6 rounded-full hover:bg-green-700 transition duration-300">Edit</a>
+        <form action="{% url 'delete_blog_post' post_id=post.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn-delete bg-red-600 text-white py-2 px-6 rounded-full hover:bg-red-700 transition duration-300">Delete</button>
+        </form>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

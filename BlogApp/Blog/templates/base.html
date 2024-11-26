@@ -1,0 +1,110 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jimmy's Blog</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="{% static 'js/theme.js' %}" defer></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-poppins">
+
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center px-4 py-3">
+            <!-- Left Section: Logo -->
+            <div class="flex items-center space-x-6">
+                <!-- Logo -->
+                <a href="/" class="text-blue-600 text-2xl font-bold flex items-center space-x-2">
+                    <i class="fa-solid fa-pen-fancy"></i>
+                    <span>Jimmy's Blog</span>
+                </a>
+            </div>
+
+            <!-- Right Section: Navigation for Large Screens and Mobile Menu -->
+            <div class="flex items-center space-x-4">
+                <!-- Mobile Menu Button -->
+                <button id="menu-toggle" class="text-gray-600 md:hidden">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex space-x-6">
+                    <a href="/" class="hover:text-blue-500">Home</a>
+                    <a href="/categories/" class="hover:text-blue-500">Categories</a>
+                    <a href="/about/" class="hover:text-blue-500">About</a>
+                </nav>
+
+                <!-- Search and CTAs -->
+                <div class="flex items-center space-x-4">
+                    <form action="{% url 'blog_search' %}" method="get" class="hidden md:flex items-center bg-gray-200 rounded-full px-3">
+                        <input type="text" name="q" placeholder="Search..." class="bg-transparent outline-none py-1 px-2">
+                        <button type="submit">
+                            <i class="fa-solid fa-search text-gray-600"></i>
+                        </button>
+                    </form>
+
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'create_blog_post' %}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                        New Post
+                    </a>
+                    <form action="{% url 'logout' %}" method="post" class="hidden md:inline-block">
+                        {% csrf_token %}
+                        <button type="submit" class="text-blue-500 hover:text-blue-600">Logout</button>
+                    </form>
+                    {% else %}
+                    <a href="/accounts/login/" class="text-blue-500 hover:text-blue-600">Login</a>
+                    <a href="/signup/" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                        Sign Up
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation (Hidden by default) -->
+        <nav id="mobile-menu" class="md:hidden hidden flex-col space-y-4 bg-white py-4 px-6 absolute w-full top-full left-0 z-50 shadow-md">
+            <a href="/" class="hover:text-blue-500">Home</a>
+            <a href="/categories/" class="hover:text-blue-500">Categories</a>
+            <a href="/about/" class="hover:text-blue-500">About</a>
+            <a href="/signup/" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Sign Up</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        {% block content %}
+        <!-- Add featured posts or hero section here -->
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 py-8">
+        <div class="container mx-auto text-center space-y-4">
+            <p>&copy; {{ current_year }} Jimmy's Blog. All rights reserved.</p>
+            <div class="space-x-4">
+                <a href="#" class="hover:text-blue-400">
+                    <i class="fa-brands fa-facebook"></i>
+                </a>
+                <a href="#" class="hover:text-blue-400">
+                    <i class="fa-brands fa-twitter"></i>
+                </a>
+                <a href="#" class="hover:text-blue-400">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        document.getElementById('menu-toggle').addEventListener('click', () => {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>

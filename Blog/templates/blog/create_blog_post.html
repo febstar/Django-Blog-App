@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Create Blog Post</h2>
+    <form method="post" class="blog-post-form">
+        {% csrf_token %}
+        
+        <!-- Title Field -->
+        <div class="form-group">
+            <label for="id_title">Title</label>
+            {{ form.title }}
+            {% if form.title.errors %}
+                <div class="error-message">
+                    {% for error in form.title.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Content Field -->
+        <div class="form-group">
+            <label for="id_content">Content</label>
+            {{ form.content }}
+            {% if form.content.errors %}
+                <div class="error-message">
+                    {% for error in form.content.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="submit-btn">Publish</button>
+    </form>
+</div>
+{% endblock %}

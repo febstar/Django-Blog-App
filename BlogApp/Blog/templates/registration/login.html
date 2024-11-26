@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="flex justify-center items-center min-h-screen bg-gray-50">
+    <div class="w-full max-w-md sm:max-w-sm bg-white p-6 sm:p-8 rounded-lg shadow-lg">
+
+        <h2 class="text-2xl font-semibold text-center text-gray-800 mb-6">Login to Your Account</h2>
+
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+
+            <!-- Username Field -->
+            <div>
+                <label for="id_username" class="block text-gray-700 font-medium">Username</label>
+                {{ form.username }}
+                {% if form.username.errors %}
+                    <div class="mt-2 text-sm text-red-500">
+                        {% for error in form.username.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Password Field -->
+            <div>
+                <label for="id_password" class="block text-gray-700 font-medium">Password</label>
+                {{ form.password }}
+                {% if form.password.errors %}
+                    <div class="mt-2 text-sm text-red-500">
+                        {% for error in form.password.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Submit Button -->
+            <div>
+                <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">Login</button>
+            </div>
+        </form>
+
+        <p class="mt-4 text-center text-gray-600">Don't have an account? <a href="/signup/" class="text-blue-600 hover:underline">Sign up here</a></p>
+    </div>
+</div>
+{% endblock %}

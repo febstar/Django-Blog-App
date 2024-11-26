@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="form-container max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md space-y-6">
+    <h2 class="text-4xl font-semibold text-gray-900 mb-4">Create Blog Post</h2>
+    <form method="post" class="blog-post-form space-y-6" id="blogPostForm">
+        {% csrf_token %}
+
+        <!-- Title Field -->
+        <div class="form-group">
+            <label for="id_title" class="block text-lg font-medium text-gray-700">Title</label>
+            <input type="text" name="title" id="id_title" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="{{ form.title.value|default:'' }}">
+            {% if form.title.errors %}
+                <div class="error-message text-sm text-red-600 mt-1">
+                    {% for error in form.title.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Content Field with CKEditor -->
+        <div class="form-group">
+            <label for="id_content" class="block text-lg font-medium text-gray-700">Content</label>
+            {{ form.content }}
+            {% if form.content.errors %}
+                <div class="error-message text-sm text-red-600 mt-1">
+                    {% for error in form.content.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+
+        <!-- Tag Field -->
+        <div class="form-group">
+            <label for="id_tag" class="block text-lg font-medium text-gray-700">Tag</label>
+            <input type="text" name="tag" id="id_tag" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="{{ form.tag.value|default:'' }}" placeholder="e.g., Tech, Design, Python">
+            {% if form.tag.errors %}
+                <div class="error-message text-sm text-red-600 mt-1">
+                    {% for error in form.tag.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="submit-btn w-full py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:ring-2 focus:ring-blue-500">
+            Publish
+        </button>
+    </form>
+</div>
+
+<!-- Success Popup -->
+<div id="successPopup" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white p-4 rounded shadow-md text-center">
+        <h3 class="text-lg font-bold text-green-600">Blog post published successfully!</h3>
+        <button id="closePopup" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">OK</button>
+    </div>
+</div>
+
+{% endblock %}
