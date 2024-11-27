@@ -4,11 +4,28 @@ from django.contrib import messages
 from .forms import CommentForm, BlogPostForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
+from collections import defaultdict
 
 
 def blog_list(request):
-    posts = BlogPost.objects.filter(parent__isnull=True).order_by('-created_at')
-    return render(request, 'blog/blog_list.html', {'posts': posts})
+    posts = BlogPost.objects.all().order_by('-created_at')[:10]
+    recent_posts = BlogPost.objects.all().order_by('-created_at')[:5]
+    most_viewed = BlogPost.objects.all().order_by('-views')[:5]
+
+    # # Prefetch tags for efficiency
+    # blog_posts_with_tags = BlogPost.objects.prefetch_related('tag')
+
+    # # Group posts by tags
+    # tags_posts = defaultdict(list)
+    # for post in blog_posts_with_tags:
+    #     for tag in post.tag.all():
+    #         tags_posts[tag.name].append(post)
+    return render(request, 'blog/blog_list.html', {
+        'posts': posts,
+        'recent_posts': recent_posts,
+        'most_viewed': most_viewed,
+        # 'tags_posts': tags_posts,
+    })
 
 def blog_detail(request, post_id):
     post = get_object_or_404(BlogPost, id=post_id)

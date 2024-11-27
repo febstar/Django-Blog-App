@@ -1,27 +1,90 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="blog-posts-container max-w-4xl mx-auto p-8 bg-white rounded-lg shadow-lg">
-    <h2 class="page-title text-4xl font-bold text-gray-800 mb-8 text-center tracking-tight">Blog Posts</h2>
+<div class="container mx-auto px-4 py-8">
+    <!-- Page Header -->
+    <div class="page-header text-center mb-12">
+        <h1 class="text-5xl font-extrabold text-gray-800">🌊 Welcome to Caspian's Journals</h1>
+        <p class="text-lg text-gray-600 mt-2">a space where stories flow as freely as the tides. Dive into thoughts, tales, and a touch of the extraordinary. Stay curious, stay chill, and let's make waves together.</p>
+    </div>
 
-    <ul class="posts-list space-y-8">
-        {% for post in posts %}
-        <li class="post-item bg-gray-50 p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:scale-105">
-            <a href="{{ post.id }}/" class="post-link block">
-                <h3 class="text-2xl font-semibold text-gray-800 mb-4">{{ post.title }}</h3>
-                <p class="post-excerpt text-gray-600 mb-4">{{ post.content|truncatewords:30 }}</p>
-
-                <!-- Tags -->
-                <div class="post-tags flex flex-wrap space-x-4">
-                    {% for tag in post.tags.all %}
-                    <span class="tag bg-blue-200 text-blue-800 py-1 px-3 rounded-full text-sm">
-                        {{ tag.name }}
-                    </span>
+    <!-- Main Layout -->
+    <div class="main-layout grid grid-cols-1 lg:grid-cols-4 gap-12">
+        <!-- Main Blog Posts -->
+        <div class="lg:col-span-3">
+            <section class="blog-posts bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6 border-b-2 pb-2">Fresh Reads</h2>
+                <ul class="space-y-6">
+                    {% for post in posts %}
+                    <li class="post-item bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition transform hover:scale-105">
+                        <a href="{{ post.id }}/" class="block">
+                            <h3 class="text-2xl font-semibold text-gray-800 mb-2">{{ post.title }}</h3>
+                            <p class="text-gray-600 mb-4">{{ post.content|truncatewords:20 }}</p>
+                            <div class="tags flex flex-wrap space-x-2">
+                                {% for tag in post.tag.all %}
+                                <span class="tag bg-blue-200 text-blue-800 py-1 px-2 rounded-full text-sm">
+                                    {{ tag.name }}
+                                </span>
+                                {% endfor %}
+                            </div>
+                        </a>
+                    </li>
                     {% endfor %}
+                </ul>
+            </section>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar space-y-8">
+            <!-- Most Viewed -->
+            <section class="most-viewed bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">Top Picks</h3>
+                <ul class="space-y-4">
+                    {% for post in most_viewed %}
+                    <li>
+                        <a href="{{ post.id }}/" class="text-lg font-medium text-blue-600 hover:underline">
+                            {{ post.title }}
+                        </a>
+                        <p class="text-gray-500 text-sm">Views: {{ post.views }}</p>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </section>
+
+            {% comment %} <!-- Categories (Tag-Wise Sections) -->
+            <section class="categories bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">Posts by Categories</h3>
+                {% for tag, tag_posts in tags_posts.items %}
+                <div class="category-section mb-6">
+                    <h4 class="text-xl font-semibold text-green-800 mb-3 border-b pb-1">{{ tag }}</h4>
+                    <ul class="space-y-3">
+                        {% for post in tag_posts %}
+                        <li>
+                            <a href="{{ post.id }}/" class="text-lg font-medium text-blue-600 hover:underline">
+                                {{ post.title }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
                 </div>
-            </a>
-        </li>
-        {% endfor %}
-    </ul>
+                {% endfor %}
+            </section> {% endcomment %}
+
+            <!-- Recent Posts -->
+            <section class="recent-posts bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">New Arrivals</h3>
+                <ul class="space-y-4">
+                    {% for post in recent_posts %}
+                    <li>
+                        <a href="{{ post.id }}/" class="text-lg font-medium text-blue-600 hover:underline">
+                            {{ post.title }}
+                        </a>
+                        <p class="text-gray-500 text-sm">{{ post.created_at|date:"F j, Y" }}</p>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </section>
+        </aside>
+    </div>
 </div>
 {% endblock %}
