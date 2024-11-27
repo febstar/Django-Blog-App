@@ -2,13 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "BlogApp/wsgi.py",
-      "use": "@vercel/python",
-      "config": { "maxLambdaSize": "50mb" }
+      "src": "manage.py",
+      "use": "@vercel/python"
     }
   ],
   "routes": [
-    { "src": "/static/(.*)", "dest": "/static/$1" },
-    { "src": "/(.*)", "dest": "BlogApp/wsgi.py" }
+    {
+      "src": "/(.*)",
+      "dest": "/manage.py"
+    }
   ]
 }
